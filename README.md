@@ -21,15 +21,16 @@
 
 A full-stack project management tool in the spirit of Jira and Trello, built for small teams. Create a workspace, invite teammates by email, start projects, break them into tasks, assign work, comment on tasks, and track progress on a dashboard with a calendar and analytics charts.
 
-It started as a team learning project built from an online tutorial. I then set it up independently with my own Clerk and Neon accounts, deployed both the frontend and the backend on Vercel, and fixed several real-world issues (authentication errors, task-creation failures, member sync, and secret handling). The details are in [What I added and fixed](#-what-i-added-and-fixed).
+It started as a team learning project built from an online tutorial. I then set it up independently with my own Clerk and Neon accounts, deployed both the frontend and the backend on Vercel, and fixed several real-world issues: authentication errors, task-creation failures, member sync, and secret handling. The details are in the "What I Added and Fixed" section below.
 
 **Live app:** https://pm-client-two.vercel.app
 
+---
 
 ## 🚀 Features
 
 **Workspaces and teams**
-- Sign up and log in with Clerk (email or Google)
+- Sign up and log in with Clerk
 - Workspaces built on Clerk Organizations, with Admin and Member roles
 - Invite teammates to a workspace by email
 - A team page that lists everyone in the workspace
@@ -49,8 +50,9 @@ It started as a team learning project built from an online tutorial. I then set 
 **Dashboard and insights**
 - Stats cards: total projects, completed projects, my tasks, overdue tasks
 - Project overview cards with progress bars
+- Recent activity panel
 - Calendar view of due dates
-- Analytics charts (Recharts) for task status, type, and priority
+- Analytics charts (Recharts): tasks by status, type, and priority, plus completion rate, active tasks, overdue tasks, and team size
 - Light and dark mode
 
 ---
@@ -63,7 +65,7 @@ It started as a team learning project built from an online tutorial. I then set 
 | Backend | Node.js, Express 5 |
 | Database | PostgreSQL on Neon, accessed with Prisma ORM |
 | Authentication | Clerk (sessions, organizations, invitations) |
-| Background jobs and email | Inngest and Nodemailer (optional, see [Known limitations](#-known-limitations)) |
+| Background jobs and email | Inngest and Nodemailer (optional, see Known Limitations below) |
 | Deployment | Vercel (two projects: client and server) |
 
 ---
@@ -84,7 +86,7 @@ It started as a team learning project built from an online tutorial. I then set 
 2. The app sends API requests with the Clerk session token.
 3. The Express server verifies the token and finds the user.
 4. Controllers check workspace and project membership, then read or write data through Prisma.
-5. On each login, a sync step copies the user, their organizations, and every accepted member from Clerk into the database, so invited teammates appear without needing webhooks.
+5. Each time the app loads your workspaces, a sync step copies the user, their organizations, and every accepted member from Clerk into the database, so invited teammates appear without needing webhooks.
 
 ---
 
@@ -212,7 +214,7 @@ Every push to `main` redeploys both projects automatically.
 
 ---
 
-## 🛠️ What I Added and Fixed
+## What I Added and Fixed
 
 - **Authentication:** Fixed 401 errors caused by Clerk "pending" sessions by updating session handling in the auth middleware and every controller.
 - **Reliable task creation:** Task creation no longer fails when the email service is unavailable; the email step is isolated from the core operation.
@@ -223,7 +225,7 @@ Every push to `main` redeploys both projects automatically.
 
 ---
 
-## ⚠️ Known Limitations
+## Known Limitations
 
 - "Task assigned" and due-date emails need Inngest and Brevo (SMTP) keys, so they are off by default.
 - The app uses Clerk development keys, which have usage limits.
