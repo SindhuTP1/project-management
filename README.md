@@ -15,4 +15,4 @@ A team learning project, built following an online tutorial. I set it up indepen
 5. Open http://localhost:5173
 
 ## Live demo
-Coming soon.
+   https://pm-client-two.vercel.app
